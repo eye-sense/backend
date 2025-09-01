@@ -45,7 +45,6 @@ public class ImageService {
                 .bucket(bucket)
                 .key(key)
                 .contentType(file.getContentType())
-                .acl("public-read")
                 .build();
 
         s3Client.putObject(put, RequestBody.fromBytes(file.getBytes()));

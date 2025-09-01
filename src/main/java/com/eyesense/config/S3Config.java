@@ -3,7 +3,7 @@ package com.eyesense.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -22,11 +22,14 @@ public class S3Config {
     @Value("${aws.secretAccessKey:}")
     private String secretAccessKey;
 
+    @Value("${aws.sessionToken:}")
+    private String sessionToken;
+
     @Bean
     public S3Client s3Client() {
         AwsCredentialsProvider provider;
         if (accessKeyId != null && !accessKeyId.isBlank() && secretAccessKey != null && !secretAccessKey.isBlank()) {
-            provider = StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKeyId, secretAccessKey));
+            provider = StaticCredentialsProvider.create(AwsSessionCredentials.create(accessKeyId, secretAccessKey, sessionToken));
         } else {
             provider = DefaultCredentialsProvider.create();
         }
