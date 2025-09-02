@@ -25,4 +25,4 @@ aws:
 
 ai:
   api:
-    base-url: http://localhost:8000          # optional, can be set as environment variable
+    base-url: http://54.174.128.209:8000          # optional, can be set as environment variable
