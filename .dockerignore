@@ -1,0 +1,39 @@
+# Note: target/ is needed for the JAR file, so it's not ignored here
+# If using multi-stage build, this wouldn't be necessary
+
+# Ignore version control
+.git
+.gitignore
+
+# Environment files
+.env
+.env.local
+.env.example
+
+# Ignore IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore logs
+*.log
+
+# Ignore temporary files
+*.tmp
+*.swp
+*.bak
+
+# Ignore Docker files (to avoid copying them into the build context)
+Dockerfile
+.dockerignore
+
+# Ignore documentation
+README.md
+LICENSE
+docs/
