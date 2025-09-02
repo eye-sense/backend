@@ -20,7 +20,7 @@ server:
 aws:
   region: us-east-1
   s3:
-    bucket: eyesense-demo-ml-api  # Colocar nome do bucket final
+    bucket: sptech-eyesense-backend-bucket  # Colocar nome do bucket final
     publicBaseUrl: https://%s.s3.amazonaws.com
 
 ai:
