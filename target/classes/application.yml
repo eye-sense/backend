@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  thymeleaf:
+    cache: false
+server:
+  port: 8090
+
+
+aws:
+  region: us-east-1
+  s3:
+    bucket: eyesense-demo-ml-api  # Colocar nome do bucket final
+    publicBaseUrl: https://%s.s3.amazonaws.com
+
+ai:
+  api:
+    base-url: http://localhost:8000          # optional, can be set as environment variable
