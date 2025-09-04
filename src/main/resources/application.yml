@@ -25,4 +25,4 @@ aws:
 
 ai:
   api:
-    base-url: http://54.165.169.141:8000          # optional, can be set as environment variable
+    base-url: http://35.175.143.125:8000          # optional, can be set as environment variable
