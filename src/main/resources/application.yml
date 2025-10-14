@@ -20,9 +20,9 @@ server:
 aws:
   region: us-east-1
   s3:
-    bucket: sptech-eyesense-backend-bucket  # Colocar nome do bucket final
+    bucket: sptech-eyesense-backend-teste05  # Colocar nome do bucket final
     publicBaseUrl: https://%s.s3.amazonaws.com
 
 ai:
   api:
-    base-url: http://54.174.128.209:8000          # optional, can be set as environment variable
+    base-url: ${AI_API_BASE_URL:http://localhost:8000}
