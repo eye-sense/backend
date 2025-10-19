@@ -28,23 +28,26 @@ public class ImageController {
             return ResponseEntity.badRequest().body(Map.of("error", "Selecione um arquivo de imagem."));
         }
 
-            ImageRecord imageRecord = imageService.processImage(file);
-            AiResponse aiResponse = imageRecord.aiResponse();
+        ImageRecord imageRecord = imageService.processImage(file);
+        AiResponse aiResponse = imageRecord.aiResponse();
 
-            Map<String, Object> analysisResult = new HashMap<>();
-            if (aiResponse.probabilities() != null) {
-                for (var prob : aiResponse.probabilities()) {
-                    analysisResult.put(prob.label(), Map.of("confidence", (int)(prob.probability() * 100)));
+        Map<String, Object> analysisResult = new HashMap<>();
+        if (aiResponse.probabilities() != null) {
+            for (var probMap : aiResponse.probabilities()) {
+                for (var entry : probMap.entrySet()) {
+                    analysisResult.put(entry.getKey(), Map.of("confidence", (int)(entry.getValue() * 100)));
                 }
             }
+        }
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("imageUrl", imageRecord.s3Url());
-            response.put("analysisResult", analysisResult);
-            response.put("label", aiResponse.label());
-            response.put("requestId", aiResponse.request_id());
-            response.put("modelVersion", aiResponse.model_version());
 
-            return ResponseEntity.ok(response);
+        Map<String, Object> response = new HashMap<>();
+        response.put("imageUrl", imageRecord.s3Url());
+        response.put("analysisResult", analysisResult);
+        response.put("label", aiResponse.label());
+        response.put("requestId", aiResponse.request_id());
+        response.put("modelVersion", aiResponse.model_version());
+
+        return ResponseEntity.ok(response);
     }
 }

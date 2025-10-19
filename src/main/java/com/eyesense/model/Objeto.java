@@ -4,11 +4,10 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-@Table(name = "usuario", schema = "eye_sense")
-public class User {
+@Table(name = "objeto", schema = "eye_sense")
+public class Objeto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,11 +15,11 @@ public class User {
     @Column(name = "nome", nullable = false, length = 64)
     private String name;
 
-    @Column(name = "email", nullable = false, unique = true, length = 256)
-    private String email;
+    @Column(name = "extensao", nullable = false, length = 5)
+    private String extension;
 
-    @Column(name = "senha", nullable = false)
-    private String password;
+    @Column(name = "path_s3", nullable = false, length = 264)
+    private String pathS3;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -33,10 +32,14 @@ public class User {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Objeto> objects;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private User user;
 
-    public User() {}
+    @OneToOne(mappedBy = "objeto")
+    private Result result;
+
+    public Objeto() {}
 
     public Long getId() {
         return id;
@@ -54,20 +57,20 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getExtension() {
+        return extension;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setExtension(String extension) {
+        this.extension = extension;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPathS3() {
+        return pathS3;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPathS3(String pathS3) {
+        this.pathS3 = pathS3;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -86,11 +89,19 @@ public class User {
         this.deletedAt = deletedAt;
     }
 
-    public List<Objeto> getObjects() {
-        return objects;
+    public User getUser() {
+        return user;
     }
 
-    public void setObjects(List<Objeto> objects) {
-        this.objects = objects;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Result getResult() {
+        return result;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
     }
 }

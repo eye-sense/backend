@@ -1,28 +1,27 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
+    url: ${SPRING_DATASOURCE_URL}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
+    username: ${POSTGRES_USER}
+    password: ${EYE_SENSE_ADMIN_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
   thymeleaf:
     cache: false
 server:
-  port: 8090
-
+  port: ${SERVER_PORT}
 
 aws:
-  region: us-east-1
+  region: ${AWS_REGION}
   s3:
-    bucket: sptech-eyesense-backend-teste05  # Colocar nome do bucket final
-    publicBaseUrl: https://%s.s3.amazonaws.com
+    bucket: ${AWS_S3_BUCKET}
+    publicBaseUrl: ${AWS_S3_PUBLIC_BASE_URL}
 
 ai:
   api:
-    base-url: ${AI_API_BASE_URL:http://localhost:8000}
+    base-url: ${AI_API_BASE_URL}
