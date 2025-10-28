@@ -21,9 +21,11 @@ public class LoginController {
     }
 
     @GetMapping("/login")
-    public String loginPage() {
-        return "login"; // login.html template
+    @ResponseBody
+    public ResponseEntity<?> loginPage() {
+        return ResponseEntity.ok(Map.of("message", "Login endpoint ready"));
     }
+
 
     @PostMapping("/login")
     @ResponseBody

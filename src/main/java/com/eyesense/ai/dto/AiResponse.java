@@ -6,6 +6,6 @@ import java.util.Map;
 public record AiResponse(
         String request_id,
         String label,
-        List<Map<String, Double>> probabilities,
+        List<List<Probability>> probabilities,
         String model_version
 ) {}

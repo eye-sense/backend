@@ -8,6 +8,7 @@ import com.eyesense.model.Result;
 import com.eyesense.model.User;
 import com.eyesense.repository.ObjectRepository;
 import com.eyesense.repository.ResultRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,13 +68,17 @@ public class ImageService {
         String key = "uploads/" + internalId + "-" + Instant.now().toEpochMilli() + "-" + filename;
 
         // Upload to S3
-        PutObjectRequest put = PutObjectRequest.builder()
-                .bucket(bucket)
-                .key(key)
-                .contentType(file.getContentType())
-                .build();
+        boolean live = false;
+        if (!live) {
 
-        s3Client.putObject(put, RequestBody.fromBytes(file.getBytes()));
+            PutObjectRequest put = PutObjectRequest.builder()
+                    .bucket(bucket)
+                    .key(key)
+                    .contentType(file.getContentType())
+                    .build();
+
+            s3Client.putObject(put, RequestBody.fromBytes(file.getBytes()));
+        }
 
         // Create and save Objeto entity
         Objeto imageObject = new Objeto();
@@ -95,21 +100,21 @@ public class ImageService {
         Result result = new Result();
 
         if (response.probabilities() != null) {
-            for (var probMap : response.probabilities()) {
-                for (var entry : probMap.entrySet()) {
-                    String label = entry.getKey();
-                    BigDecimal probability = BigDecimal.valueOf(entry.getValue() * 100);
+            for (var innerList : response.probabilities()) {
+                for (var item : innerList) {
+                    String label = item.label();
+                    BigDecimal probability = BigDecimal.valueOf(item.probability() * 100);
 
                     switch (label) {
-                        case "saudavel" -> result.setHealthyProbability(probability);
-                        case "catarata" -> result.setCataractProbability(probability);
-                        case "glaucoma" -> result.setGlaucomaProbability(probability);
+                        case "Saudável" -> result.setHealthyProbability(probability);
+                        case "Catarata" -> result.setCataractProbability(probability);
+                        case "Glaucoma" -> result.setGlaucomaProbability(probability);
                     }
                 }
             }
         }
-
-        result.setRawJson(response.toString());
+        ObjectMapper mapper = new ObjectMapper();
+        result.setRawJson(mapper.writeValueAsString(response));
         result.setModelVersion(response.model_version());
         result.setObjeto(imageObject);
         resultRepository.save(result);

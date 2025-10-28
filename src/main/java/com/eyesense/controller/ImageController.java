@@ -1,6 +1,7 @@
 package com.eyesense.controller;
 
 import com.eyesense.ai.dto.AiResponse;
+import com.eyesense.ai.dto.Probability;
 import com.eyesense.model.ImageRecord;
 import com.eyesense.service.ImageService;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -30,12 +32,16 @@ public class ImageController {
 
         ImageRecord imageRecord = imageService.processImage(file);
         AiResponse aiResponse = imageRecord.aiResponse();
-
         Map<String, Object> analysisResult = new HashMap<>();
-        if (aiResponse.probabilities() != null) {
-            for (var probMap : aiResponse.probabilities()) {
-                for (var entry : probMap.entrySet()) {
-                    analysisResult.put(entry.getKey(), Map.of("confidence", (int)(entry.getValue() * 100)));
+
+        List<List<Probability>> probabilities = aiResponse.probabilities();
+        if (probabilities != null) {
+            for (List<Probability> innerList : probabilities) {
+                for (Probability item : innerList) {
+                    analysisResult.put(
+                            item.label(),
+                            Map.of("confidence", (int) (item.probability() * 100))
+                    );
                 }
             }
         }

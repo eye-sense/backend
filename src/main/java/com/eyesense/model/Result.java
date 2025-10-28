@@ -3,6 +3,8 @@ package com.eyesense.model;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -23,7 +25,8 @@ public class Result {
     private BigDecimal glaucomaProbability;
 
     @Column(name = "raw", nullable = false, columnDefinition = "json")
-    private String rawJson;
+    @JdbcTypeCode(SqlTypes.JSON)
+    private Object rawJson;
 
     @Column(name = "model_version", nullable = false, length = 32)
     private String modelVersion;
@@ -77,11 +80,11 @@ public class Result {
         this.glaucomaProbability = glaucomaProbability;
     }
 
-    public String getRawJson() {
+    public Object getRawJson() {
         return rawJson;
     }
 
-    public void setRawJson(String rawJson) {
+    public void setRawJson(Object rawJson) {
         this.rawJson = rawJson;
     }
 
